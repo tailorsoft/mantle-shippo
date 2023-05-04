@@ -731,6 +731,7 @@ along with this software (see the LICENSE.md file). If not, see
             </if>
 
             <!-- ===== Shipment Extra Map ===== -->
+            <!-- TODO: ADDING attention_to IN THIS EXTRA MAP IF FOUND IN SHIPMENT -->
 
             <!-- reference_1 with Shipment, Order IDs -->
             <set field="reference1" value="Shipment ${shipmentId}"/>
