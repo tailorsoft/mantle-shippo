@@ -779,6 +779,19 @@ along with this software (see the LICENSE.md file). If not, see
                                 zip:pssg.billingZip, country:pssg.billingCountry]"/>
                 </if>
             </if>
+            <!-- extra attention to from ShipmentParty if role type: -->
+            <entity-find-one entity-name="mantle.shipment.ShipmentParty" value-field="AttnToShipmentParty">
+                <field-map field-name="roleTypeId" value="AttnTo"/>
+                <select-field field-name="shipmentId"/>
+            </entity-find-one>
+            <entity-find-one entity-name="mantle.party.Person" value-field="AttnToParty">
+                <field-map field-name="partyId" from="AttnToShipmentParty.partyId"/>
+            </entity-find-one>
+            <if condition="AttnToParty">
+                <then>
+                    <set field="extraMap.fields" from="[attention_to: AttnToParty.salutation+' '+AttnToParty.firstName+' '+AttnToParty.middleName+' '+AttnToParty.lastName"/>
+                </then>
+            </if>
 
             <!-- assemble the shipment Map -->
             <!-- NOTE: Shippo returns an error like 'The address_return may not be set when a return_of is specified' if address_return is used, so use address_return if there is one for address_from if getReturnLabels -->
