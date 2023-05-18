@@ -17,4 +17,8 @@ along with this software (see the LICENSE.md file). If not, see
 
     <moqui.basic.Enumeration description="Shippo Gateway Options" enumId="EgShippoOption" enumTypeId="EnumGroup"/>
     <moqui.basic.EnumGroupMember enumGroupEnumId="EgShippoOption" enumId="SgoApiToken" sequenceNum="1"/>
+
+    <!-- Role for shipment party (RgpShipment) AttnTo -->
+    <mantle.party.RoleType roleTypeId="AttnTo" description="Attention to"/>
+    <mantle.party.RoleGroupMember roleGroupEnumId="RgpShipment" roleTypeId="AttnTo"/>
 </entity-facade-xml>

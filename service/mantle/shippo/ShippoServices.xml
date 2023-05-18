@@ -731,6 +731,7 @@ along with this software (see the LICENSE.md file). If not, see
             </if>
 
             <!-- ===== Shipment Extra Map ===== -->
+            <!-- TODO: ADDING attention_to IN THIS EXTRA MAP IF FOUND IN SHIPMENT -->
 
             <!-- reference_1 with Shipment, Order IDs -->
             <set field="reference1" value="Shipment ${shipmentId}"/>
@@ -756,6 +757,27 @@ along with this software (see the LICENSE.md file). If not, see
             <!-- reference_2 with otherPartyOrderId -->
             <set field="reference2" value=""/>
             <if condition="shipment.otherPartyOrderId"><set field="reference2" value="Your Order ${shipment.otherPartyOrderId}"/></if>
+
+            <!-- Change reference_2 for AttnTo if shipment is incoming and has an AttnTo associated party -->
+            <entity-find-one entity-name="mantle.shipment.ShipmentParty" value-field="AttnToShipmentParty">
+                <field-map field-name="roleTypeId" value="AttnTo"/>
+                <field-map field-name="shipmentId" from="shipmentId"/>
+            </entity-find-one>
+
+
+            <if condition="shipment.shipmentTypeEnumId == 'ShpTpIncoming' &amp;&amp; AttnToShipmentParty">
+                <!-- TODO find better way to get party description (For orgs and not so long script) -->
+                <entity-find-one entity-name="mantle.party.Person" value-field="AttnToParty">
+                    <field-map field-name="partyId" from="AttnToShipmentParty.partyId"/>
+                </entity-find-one>
+
+                <set field="fullName" from="(AttnToParty.salutation ? AttnToParty.salutation + ' ' : '') +
+                                                    (AttnToParty.firstName? AttnToParty.firstName+' ' : '') +
+                                                    (AttnToParty.middleName? AttnToParty.middleName+' ' : '') +
+                                                    (AttnToParty.lastName? AttnToParty.lastName+' ' : '')"/>
+                <set field="reference2" from="'AttnTo:'+ fullName"/>
+
+            </if>
 
             <!-- assemble the extra Map -->
             <set field="extraMap" from="[reference_1:reference1, reference_2:reference2, bypass_address_validation:true, is_return:getReturnLabels]"/>
